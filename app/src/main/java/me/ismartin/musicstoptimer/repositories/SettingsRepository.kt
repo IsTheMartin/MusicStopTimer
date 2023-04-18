@@ -15,7 +15,7 @@ class SettingsRepository @Inject constructor(
 
     fun getSettings(): Flow<List<SettingDisplayModel>> {
         return dataStore.getSettingPreferences().map {
-            settingToDisplay(it)
+            createSettingsList(it)
         }
     }
 
@@ -24,18 +24,23 @@ class SettingsRepository @Inject constructor(
     suspend fun saveSettings(updatedSettingsList: List<SettingDisplayModel>) {
         var setting = SettingModel()
         updatedSettingsList.forEach { updatedSetting ->
-            setting = when (updatedSetting.id) {
-                SettingName.DARK_THEME.id -> setting.copy(darkTheme = (updatedSetting.type as SettingType.Switch).value)
-                SettingName.TURN_OFF_BLUETOOTH.id -> setting.copy(turnOffBluetooth = (updatedSetting.type as SettingType.Switch).value)
-                SettingName.MEDIA_PLAYER_1.id -> setting.copy(mediaPlayer1 = (updatedSetting.type as SettingType.SingleSelection).value)
-                SettingName.MEDIA_PLAYER_2.id -> setting.copy(mediaPlayer2 = (updatedSetting.type as SettingType.SingleSelection).value)
-                else -> setting
+            setting = when (updatedSetting.type) {
+                is SettingType.SingleSelection -> when (updatedSetting.id) {
+                    SettingName.MEDIA_PLAYER_1.id -> setting.copy(mediaPlayer1 = updatedSetting.type.value)
+                    SettingName.MEDIA_PLAYER_2.id -> setting.copy(mediaPlayer2 = updatedSetting.type.value)
+                    else -> setting
+                }
+                is SettingType.Switch -> when (updatedSetting.id) {
+                    SettingName.DARK_THEME.id -> setting.copy(darkTheme = updatedSetting.type.value)
+                    SettingName.TURN_OFF_BLUETOOTH.id -> setting.copy(turnOffBluetooth = updatedSetting.type.value)
+                    else -> setting
+                }
             }
         }
         dataStore.saveSettings(setting)
     }
 
-    private fun settingToDisplay(settingModel: SettingModel): List<SettingDisplayModel> {
+    private fun createSettingsList(settingModel: SettingModel): List<SettingDisplayModel> {
         return with(settingModel) {
             listOf(
                 SettingDisplayModel(

@@ -9,7 +9,7 @@ data class SettingDisplayModel(
     @StringRes val displayName: Int,
 )
 
-sealed class SettingType() {
+sealed class SettingType {
     data class Switch(
         val value: Boolean,
     ) : SettingType()

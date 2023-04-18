@@ -1,4 +1,4 @@
-package me.ismartin.musicstoptimer.screens
+package me.ismartin.musicstoptimer.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -37,8 +37,7 @@ fun SettingsScreen(navController: NavController, viewModel: MainViewModel) {
     Scaffold(
         topBar = { TopBar(navController = navController) }
     ) { paddingValues ->
-        paddingValues
-        LazyColumn {
+        LazyColumn(contentPadding = paddingValues) {
             items(settingsList.value) { setting ->
                 when (setting.type) {
                     is SettingType.SingleSelection -> {

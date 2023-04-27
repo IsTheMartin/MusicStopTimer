@@ -29,3 +29,14 @@ enum class SettingName(
     MEDIA_PLAYER_1("mediaPlayer1", R.string.set_media_player_1),
     MEDIA_PLAYER_2("mediaPlayer2", R.string.set_media_player_2),
 }
+
+sealed class SettingsEvent {
+    data class OnSwitchSettingChange(
+        val setting: SettingDisplayModel,
+        val newValue: Boolean
+    ) : SettingsEvent()
+    data class OnSingleSelectionSettingChange(
+        val setting: SettingDisplayModel,
+        val newValue: String
+    ) : SettingsEvent()
+}

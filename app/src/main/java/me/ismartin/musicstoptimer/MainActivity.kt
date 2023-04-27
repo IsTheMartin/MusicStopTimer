@@ -31,7 +31,11 @@ class MainActivity : ComponentActivity() {
                         HomeScreen(navController)
                     }
                     composable(Destinations.Settings.route) {
-                        SettingsScreen(navController, viewModel)
+                        SettingsScreen(
+                            navController = navController,
+                            settingsState = viewModel.settingsState.collectAsState().value,
+                            settingsEvent = viewModel::processSettingsEvents
+                        )
                     }
                 }
             }

@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import me.ismartin.musicstoptimer.repositories.SettingsRepository
 import me.ismartin.musicstoptimer.repositories.models.SettingDisplayModel
 import me.ismartin.musicstoptimer.repositories.models.SettingType
+import me.ismartin.musicstoptimer.repositories.models.SettingsEvent
 import javax.inject.Inject
 
 @HiltViewModel
@@ -23,17 +24,26 @@ class MainViewModel @Inject constructor(
     val darkThemeState: StateFlow<Boolean> = settingsRepository.isDarkTheme()
         .stateIn(viewModelScope, SharingStarted.Lazily, false)
 
-    fun updateSwitchSettingValue(setting: SettingDisplayModel, newValue: Boolean) {
+    fun processSettingsEvents(settingsEvent: SettingsEvent) {
+        when (settingsEvent) {
+            is SettingsEvent.OnSwitchSettingChange -> {
+                updateSwitchSettingValue(settingsEvent.setting, settingsEvent.newValue)
+            }
+            is SettingsEvent.OnSingleSelectionSettingChange -> TODO()
+        }
+    }
+
+    private fun updateSwitchSettingValue(setting: SettingDisplayModel, newValue: Boolean) {
         val settingIndex = settingsState.value.indexOf(setting)
         if (settingIndex >= 0) {
             val currentSettingsList = settingsState.value.minus(setting).toMutableList()
             val settingUpdated = setting.copy(type = SettingType.Switch(newValue))
             currentSettingsList.add(settingIndex, settingUpdated)
-            updateSettings(currentSettingsList)
+            saveSettings(currentSettingsList)
         }
     }
 
-    private fun updateSettings(updatedSettingsList: List<SettingDisplayModel>) =
+    private fun saveSettings(updatedSettingsList: List<SettingDisplayModel>) =
         viewModelScope.launch(Dispatchers.IO) {
             settingsRepository.saveSettings(updatedSettingsList)
         }

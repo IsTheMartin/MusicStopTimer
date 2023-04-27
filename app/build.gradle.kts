@@ -5,20 +5,18 @@ plugins {
     id("com.google.dagger.hilt.android")
 }
 
-val compose_ui_version = "1.2.0"
-
 android {
     namespace = "me.ismartin.musicstoptimer"
-    compileSdk = 33
+    compileSdk = AppConfig.compileSdk
 
     defaultConfig {
         applicationId = "me.ismartin.musicstoptimer"
-        minSdk = 24
-        targetSdk = 33
-        versionCode = 1
-        versionName = "1.0"
+        minSdk = AppConfig.minSdk
+        targetSdk = AppConfig.targetSdk
+        versionCode = AppConfig.versionCode
+        versionName = AppConfig.versionName
 
-        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner = Dependencies.JUnit.instrumentationRunner
         vectorDrawables {
             useSupportLibrary = true
         }
@@ -38,14 +36,14 @@ android {
         targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = AppConfig.jvmTarget
     }
     buildFeatures.compose = true
     buildFeatures {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.0"
+        kotlinCompilerExtensionVersion = AppConfig.kotlinCompilerExtension
     }
     packagingOptions {
         resources {
@@ -55,29 +53,11 @@ android {
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.10.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
-    implementation("androidx.activity:activity-compose:1.7.0")
-    implementation("androidx.compose.ui:ui:$compose_ui_version")
-    implementation("androidx.compose.ui:ui-tooling-preview:$compose_ui_version")
-    implementation("androidx.compose.material:material:1.4.1")
-
-    implementation("androidx.navigation:navigation-compose:2.6.0-alpha09")
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
-    implementation("androidx.activity:activity-ktx:1.7.0")
-
-    implementation("com.google.dagger:hilt-android:2.44")
-    kapt("com.google.dagger:hilt-android-compiler:2.44")
-
-    testImplementation("junit:junit:4.13.2")
-    testImplementation("androidx.test:core-ktx:1.5.0")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:$compose_ui_version")
-    androidTestImplementation("androidx.test:runner")
-    debugImplementation("androidx.compose.ui:ui-tooling:$compose_ui_version")
-    debugImplementation("androidx.compose.ui:ui-test-manifest:$compose_ui_version")
+    implementation(Dependencies.appLibraries)
+    kapt(Dependencies.kaptLibraries)
+    testImplementation(Dependencies.testLibraries)
+    androidTestImplementation(Dependencies.androidTestLibraries)
+    debugImplementation(Dependencies.debugLibraries)
 }
 
 kapt {
@@ -96,7 +76,7 @@ fun Project.setupKtlint() {
         }
     }
     dependencies {
-        ktlintConfiguration("com.pinterest:ktlint:0.45.2")
+        ktlintConfiguration(Dependencies.Pinterest.ktlint)
     }
 
     val directoriesWithSource = listOf(

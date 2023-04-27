@@ -1,0 +1,17 @@
+object Versions {
+    val activityKtx = "1.5.1"
+    val compose = "1.1.0"
+    val composeActivity = "1.5.0"
+    val composeMaterial = "1.2.1"
+    val composeNavigation = "2.5.3"
+    val coreKtx = "1.8.0"
+    val coroutinesTest = "1.6.4"
+    val dataStorePreferences = "1.0.0"
+    val espresso = "3.5.1"
+    val hilt = "2.44"
+    val junit = "4.13.2"
+    val junitExt = "1.1.5"
+    val ktlint = "0.45.2"
+    val lifecycleKtx = "2.4.0"
+    val testCoreKtx = "1.5.0"
+}
